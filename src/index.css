@@ -1,1 +1,249 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Global Styles ===== */
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* ===== Auth Pages ===== */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  padding: 1rem;
+}
+
+.auth-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: #4f46e5;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  color: white;
+  background-color: #4f46e5;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #4338ca;
+}
+
+.auth-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.auth-link {
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.auth-link a {
+  color: #4f46e5;
+  font-weight: 500;
+}
+/* ===== Improved Auth Spacing ===== */
+.auth-card {
+  padding: 2.5rem;
+}
+
+.auth-input {
+  padding: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.auth-title {
+  margin-bottom: 0.25rem;
+}
+
+.auth-subtitle {
+  margin-bottom: 2rem;
+}
+
+/* ===== Home Page ===== */
+.home-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #111827, #1f2933);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.home-card {
+  background: #ffffff;
+  padding: 3rem;
+  border-radius: 14px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.home-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.home-text {
+  color: #4b5563;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.home-button {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #dc2626;
+}
+/* ===== Auth Form Spacing ===== */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* space between email, password & button */
+}
+
+/* ===== Home Page Layout ===== */
+.home-wrapper {
+  min-height: 100vh;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.home-header {
+  background: #111827;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.home-logout {
+  background: #ef4444;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  color: white;
+}
+
+.home-logout:hover {
+  background: #dc2626;
+}
+
+/* Main Content */
+.home-main {
+  flex: 1;
+  padding: 2.5rem 2rem;
+}
+
+.home-hero {
+  max-width: 700px;
+  margin-bottom: 3rem;
+}
+
+.home-hero h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: #111827;
+}
+
+.home-hero p {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Features */
+.home-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: white;
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Footer */
+.home-footer {
+  text-align: center;
+  padding: 1rem;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.85rem;
+}

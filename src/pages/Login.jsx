@@ -1,31 +1,61 @@
-// src/pages/Login.jsx
-import React from "react";
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebase";
 import { Link } from "react-router-dom";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "/";
+    } catch {
+      setError("Invalid email or password");
+    }
+  };
+
   return (
-    <div className="login-page" style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Login</h2>
-      <form style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          style={{ padding: "10px", fontSize: "16px" }}
-        />
-        <button type="submit" style={{ padding: "10px", fontSize: "16px", cursor: "pointer" }}>
-          Login
-        </button>
-      </form>
-      <p style={{ marginTop: "10px" }}>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
+    <div className="auth-wrapper">
+      <div className="auth-card">
+        <h2 className="auth-title">Movie Booking</h2>
+        <p className="auth-subtitle">Login to your account</p>
+
+        {error && <div className="auth-error">{error}</div>}
+
+        {/* 👇 spacing handled by CSS */}
+        <form onSubmit={handleLogin} className="auth-form">
+          <input
+            type="email"
+            placeholder="Email"
+            className="auth-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            className="auth-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button type="submit" className="auth-button">
+            Login
+          </button>
+        </form>
+
+        <div className="auth-link">
+          Don’t have an account? <Link to="/register">Register</Link>
+        </div>
+      </div>
     </div>
   );
 }
