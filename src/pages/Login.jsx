@@ -1,61 +1,69 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LogIn, Mail, Lock } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
-import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
-export default function Login() {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "/";
-    } catch {
-      setError("Invalid email or password");
+      toast.success("Welcome back to CineBook!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Invalid credentials. Please try again.");
     }
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-card">
-        <h2 className="auth-title">Movie Booking</h2>
-        <p className="auth-subtitle">Login to your account</p>
+    <div className="flex justify-center items-center min-h-[80vh] bg-[#0f0f0f]">
+      <div className="bg-[#1e1e1e] p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-800">
+        <div className="text-center mb-8">
+          <LogIn className="w-12 h-12 text-yellow-500 mx-auto mb-2" />
+          <h2 className="text-3xl font-bold uppercase italic text-white">Login</h2>
+          <p className="text-gray-400 mt-2">Enter your details to continue</p>
+        </div>
 
-        {error && <div className="auth-error">{error}</div>}
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 text-gray-500 w-5 h-5" />
+            <input 
+              type="email" 
+              placeholder="Email Address" 
+              required
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg py-3 px-10 focus:outline-none focus:border-yellow-500 transition text-white"
+            />
+          </div>
 
-        {/* 👇 spacing handled by CSS */}
-        <form onSubmit={handleLogin} className="auth-form">
-          <input
-            type="email"
-            placeholder="Email"
-            className="auth-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 text-gray-500 w-5 h-5" />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-[#2a2a2a] border border-gray-700 rounded-lg py-3 px-10 focus:outline-none focus:border-yellow-500 transition text-white"
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="auth-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          <button type="submit" className="auth-button">
+          <button type="submit" className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-black py-3 rounded-lg transition duration-300 uppercase italic shadow-lg shadow-yellow-500/10">
             Login
           </button>
         </form>
 
-        <div className="auth-link">
-          Don’t have an account? <Link to="/register">Register</Link>
-        </div>
+        <p className="text-center text-gray-400 mt-6">
+          New to CineBook? <Link to="/register" className="text-yellow-500 hover:underline">Register now</Link>
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default Login;

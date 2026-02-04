@@ -1,24 +1,24 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // ✅ Added this
 import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDQoy4w_zFIdfcLFj6WNFhEOg66TKSpwPk",
-  authDomain: "movie-booking-3773e.firebaseapp.com",
-  projectId: "movie-booking-3773e",
-  storageBucket: "movie-booking-3773e.firebasestorage.app",
-  messagingSenderId: "658550727643",
-  appId: "1:658550727643:web:7808d1f234e010bb267dfe",
-  measurementId: "G-GBH7H39WDX",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// ✅ ADD THIS
+// Initialize Services
 export const auth = getAuth(app);
-
-// (optional – analytics only works on https or production)
+export const db = getFirestore(app); // ✅ ADD THIS - This fixes your error
 export const analytics = getAnalytics(app);
