@@ -12,16 +12,16 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const popularScrollRef = useRef(null);
 
-  // Fetching Data - Updated to fetch 12 movies
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch from TMDB
         const tmdbRes = await axios.get(
           'https://api.themoviedb.org/3/movie/popular?api_key=80d491707d8cf7b38aa19c7ccab0952f'
         );
-        // We take 12 movies to ensure a full grid (4 columns x 3 rows)
         setHeroMovies(tmdbRes.data.results.slice(0, 12));
 
+        // Fetch from Firestore
         const querySnapshot = await getDocs(collection(db, "movies"));
         setMovies(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       } catch (err) {
@@ -33,9 +33,8 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // --- HERO CAROUSEL LOGIC ---
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === 4 ? 0 : prev + 1)); // Keeps hero slider limited to first 5
+    setCurrentIndex((prev) => (prev === 4 ? 0 : prev + 1));
   };
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? 4 : prev - 1));
@@ -47,7 +46,6 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [heroMovies]);
 
-  // --- POPULAR SECTION SCROLL LOGIC ---
   const scrollPopular = (direction) => {
     if (popularScrollRef.current) {
       const { scrollLeft, clientWidth } = popularScrollRef.current;
@@ -75,12 +73,9 @@ const Home = () => {
         </p>
       </header>
 
-      {/* SECTION 2: HERO CAROUSEL (Top 5 Movies) */}
+      {/* SECTION 2: HERO CAROUSEL */}
       <section className="h-[65vh] w-full relative overflow-hidden group">
-        <button 
-          onClick={prevSlide}
-          className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-black/40 p-3 rounded-full border border-white/10 text-white hover:text-yellow-500 transition-all opacity-0 group-hover:opacity-100"
-        >
+        <button onClick={prevSlide} className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-black/40 p-3 rounded-full border border-white/10 text-white hover:text-yellow-500 transition-all opacity-0 group-hover:opacity-100">
           <ChevronLeft size={40} />
         </button>
 
@@ -101,17 +96,10 @@ const Home = () => {
                 <h2 className="text-4xl md:text-6xl font-black italic uppercase text-white mb-6 max-w-2xl leading-none tracking-tighter drop-shadow-2xl">
                   {movie.title}
                 </h2>
-                
                 <div className="flex flex-wrap gap-4">
-                  <button className="bg-cyan-500 text-white px-8 py-3 text-[12px] font-black rounded-sm uppercase italic hover:bg-cyan-400 transition shadow-lg tracking-widest">
-                    BUY NOW
-                  </button>
-                  <button 
-                    onClick={() => window.open('https://maps.google.com', '_blank')}
-                    className="flex items-center gap-2 bg-transparent border-2 border-yellow-500 text-yellow-500 px-6 py-3 text-[12px] font-black rounded-sm uppercase italic hover:bg-yellow-500 hover:text-black transition shadow-lg tracking-widest"
-                  >
-                    <MapPin size={16} />
-                    SEE LOCATION
+                  <button className="bg-cyan-500 text-white px-8 py-3 text-[12px] font-black rounded-sm uppercase italic hover:bg-cyan-400 transition shadow-lg tracking-widest">BUY NOW</button>
+                  <button className="flex items-center gap-2 bg-transparent border-2 border-yellow-500 text-yellow-500 px-6 py-3 text-[12px] font-black rounded-sm uppercase italic hover:bg-yellow-500 hover:text-black transition shadow-lg tracking-widest">
+                    <MapPin size={16} /> SEE LOCATION
                   </button>
                 </div>
               </div>
@@ -119,56 +107,38 @@ const Home = () => {
           </div>
         ))}
 
-        <button 
-          onClick={nextSlide}
-          className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-black/40 p-3 rounded-full border border-white/10 text-white hover:text-yellow-500 transition-all opacity-0 group-hover:opacity-100"
-        >
+        <button onClick={nextSlide} className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-black/40 p-3 rounded-full border border-white/10 text-white hover:text-yellow-500 transition-all opacity-0 group-hover:opacity-100">
           <ChevronRight size={40} />
         </button>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className={`h-1.5 transition-all duration-500 ${i === currentIndex ? "w-12 bg-cyan-500" : "w-4 bg-white/20"}`} />
-          ))}
-        </div>
       </section>
 
-      {/* MAIN CONTENT AREA */}
       <main className="container mx-auto px-6 mt-20 space-y-24">
         
-        {/* SECTION 3: POPULAR MOVIES (Showing 12 Movies from API) */}
+        {/* SECTION 3: POPULAR MOVIES (TMDB) */}
         <section className="relative group">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-8 w-1.5 bg-cyan-500"></div>
             <h2 className="text-3xl font-black uppercase italic tracking-tight">Popular Movies</h2>
           </div>
-
-          <button onClick={() => scrollPopular('left')} className="absolute -left-6 top-1/2 z-30 bg-black/60 p-2 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <ChevronLeft size={30} className="text-yellow-500" />
-          </button>
           
           <div 
             ref={popularScrollRef}
             className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {/* Map through all 12 fetched movies */}
             {heroMovies.map((movie) => (
               <div key={movie.id} className="snap-start min-w-[280px]">
+                {/* TMDB uses movie.poster_path */}
                 <MovieCard 
-                  movie={{...movie, time: "145 MIN", genre: "ACTION / SCI-FI"}} 
+                  movie={movie} 
                   isTMDB={true} 
                 />
               </div>
             ))}
           </div>
-
-          <button onClick={() => scrollPopular('right')} className="absolute -right-6 top-1/2 z-30 bg-black/60 p-2 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <ChevronRight size={30} className="text-yellow-500" />
-          </button>
         </section>
 
-        {/* SECTION 4: NOW SHOWING (From Firestore) */}
+        {/* SECTION 4: NOW SHOWING (Firestore) */}
         <section>
           <div className="flex items-center gap-4 mb-8">
             <div className="h-8 w-1.5 bg-yellow-500"></div>
@@ -176,7 +146,11 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} isTMDB={false} />
+              <MovieCard 
+                key={movie.id} 
+                movie={movie} // movie.image comes from Firestore
+                isTMDB={false} 
+              />
             ))}
           </div>
         </section>

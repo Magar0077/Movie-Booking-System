@@ -11,6 +11,7 @@ const Movies = () => {
     const fetchSeededMovies = async () => {
       // Fetching from your custom Firebase collection as per task
       const querySnapshot = await getDocs(collection(db, "movies"));
+      // The id: doc.id fix is right here
       setMovies(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
     fetchSeededMovies();
@@ -28,7 +29,6 @@ const Movies = () => {
             Now <span className="text-yellow-500">Showing</span>
           </h1>
           
-          {/* "Choose Theatre" dropdown from whiteboard sketch */}
           <div className="bg-[#1a1a1a] p-1 border border-white/10 rounded-sm w-full md:w-auto">
             <select 
               onChange={(e) => setSelectedTheatre(e.target.value)}
